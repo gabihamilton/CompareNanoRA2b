@@ -51,10 +51,10 @@ class CompareVars{
   void Draw(){
 
     TCanvas* can = new TCanvas("can","can",500,500);
-    ra2b_histo->SetLineColor(4);
+    ra2b_histo->SetLineColor(2);
     ra2b_histo->SetLineWidth(2);
     ra2b_histo->SetLineStyle(1);
-    nano_histo->SetLineColor(2);
+    nano_histo->SetLineColor(4);
     nano_histo->SetLineWidth(2);
     nano_histo->SetLineStyle(2);
     ra2b_histo->Draw("");
