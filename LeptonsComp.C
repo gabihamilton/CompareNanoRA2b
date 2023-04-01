@@ -3,17 +3,17 @@
 
 bool debug = false;
 
-vector<int> filterLeptons(Float_t* pt, double pt_threshold){
+vector<int> filterLeptons(UInt_t number, Float_t* pt, double pt_threshold/*, Float_t* eta, double eta_threshold*/){
 
-  int n=4;
-  vector<int> indices;
-  for( int i = 0 ; i < n ; i++ ){
-    if( pt[i] > pt_threshold){
-      //cout << "i: " << i << " pt: " << pt[i] << endl;
-      indices.push_back(i);
+    int n=4;
+    vector<int> indices;
+    for( int i = 0 ; i < n ; i++ ){
+        if( number>0 && pt[i] > pt_threshold /*&& fabs(eta[i]) < 2*/){
+              //cout << "i: " << i << " pt: " << pt[i] << endl;
+              indices.push_back(i);
+        }
     }
-  }
-  return indices;
+    return indices;
 }
 
 
@@ -35,12 +35,12 @@ void LeptonsComp(){
   vector<TH1F*> e_pt_nano;
   for( int i = 0 ; i < 4 ; i++ ){
     sprintf(temp,"Electronpt_ra2b%i",i);
-    e_pt_ra2b.push_back(new TH1F(temp,";Electron p_T [GeV];Events",100,0,800));
+    e_pt_ra2b.push_back(new TH1F(temp,";Electron p_T [GeV];Events",50,0,800));
     e_pt_ra2b.back()->SetLineWidth(2);
     e_pt_ra2b.back()->SetLineStyle(1);
     e_pt_ra2b.back()->SetLineColor(2);
     sprintf(temp,"Electronpt_nano%i",i);
-    e_pt_nano.push_back(new TH1F(temp,";Electron p_T [GeV];Events",100,0,800));
+    e_pt_nano.push_back(new TH1F(temp,";Electron p_T [GeV];Events",50,0,800));
     e_pt_nano.back()->SetLineWidth(2);
     e_pt_nano.back()->SetLineStyle(2);
     e_pt_nano.back()->SetLineColor(4);
@@ -50,12 +50,12 @@ void LeptonsComp(){
   vector<TH1F*> e_eta_nano;
   for( int i = 0 ; i < 4 ; i++ ){
     sprintf(temp,"Electroneta_ra2b%i",i);
-      e_eta_ra2b.push_back(new TH1F(temp,";Electron #eta [GeV];Events",100,-5,5));
+      e_eta_ra2b.push_back(new TH1F(temp,";Electron #eta [GeV];Events",50,-5,5));
       e_eta_ra2b.back()->SetLineWidth(2);
       e_eta_ra2b.back()->SetLineStyle(1);
       e_eta_ra2b.back()->SetLineColor(2);
     sprintf(temp,"Electroneta_nano%i",i);
-      e_eta_nano.push_back(new TH1F(temp,";Electron #eta [GeV];Events",100,-5,5));
+      e_eta_nano.push_back(new TH1F(temp,";Electron #eta [GeV];Events",50,-5,5));
       e_eta_nano.back()->SetLineWidth(2);
       e_eta_nano.back()->SetLineStyle(2);
       e_eta_nano.back()->SetLineColor(4);
@@ -174,19 +174,19 @@ void LeptonsComp(){
     int num_electron_ra=0;
 
   int numEvents = ra2b_t->fChain->GetEntriesFast();
+    cout << numEvents << endl;
   for( int evt = 0 ; evt < numEvents ; evt++ ){
     if(debug) cout << "event: " << evt << endl;
     ra2b_t->GetEntry(evt);
     nano_t->GetEntry(numEvents-evt-1);
 
-    //cout << "ra2" << endl;
-    vector<int> ra2b_indices_e = filterLeptons(ra2b_t->Electrons_fCoordinates_fPt, 10.0);
-    //cout << "nano" << endl;
-    vector<int> nano_indices_e = filterLeptons(nano_t->Electron_pt, 10.0);
-      vector<int> ra2b_indices_m = filterLeptons(ra2b_t->Muons_fCoordinates_fPt, 10.0);
-      vector<int> nano_indices_m = filterLeptons(nano_t->Muon_pt, 10.0);
-      vector<int> ra2b_indices_p = filterLeptons(ra2b_t->Photons_fCoordinates_fPt, 30.0);
-      vector<int> nano_indices_p = filterLeptons(nano_t->Photon_pt, 30.0);
+    
+    vector<int> ra2b_indices_e = filterLeptons(ra2b_t->Electrons_, ra2b_t->Electrons_fCoordinates_fPt, 0.0);
+    vector<int> nano_indices_e = filterLeptons(nano_t->nElectron, nano_t->Electron_pt, 0.0);
+    vector<int> ra2b_indices_m = filterLeptons(ra2b_t->Muons_, ra2b_t->Muons_fCoordinates_fPt, 0.0);
+    vector<int> nano_indices_m = filterLeptons(nano_t->nMuon, nano_t->Muon_pt, 0.0);
+    //vector<int> ra2b_indices_p = filterLeptons(ra2b_t->Photons_fCoordinates_fPt, 30.0);
+    //vector<int> nano_indices_p = filterLeptons(nano_t->Photon_pt, 30.0);
 
     //cout << "num good jets :: ra2b " << ra2b_indices.size() << " nano " << nano_indices.size() << endl;
 
@@ -197,24 +197,23 @@ void LeptonsComp(){
         e_phi_ra2b[j]->Fill(ra2b_t->Electrons_fCoordinates_fPhi[ra2b_indices_e[j]]);
           num_electron_ra = num_electron_ra + 1;
       }if( j < nano_indices_e.size() ){
-          //if (nano_t->Electron_cutBased[j]>0) e_pt_nano[j]->Fill(nano_t->Electron_pt[nano_indices_e[j]]);
-          num_electron_nano = num_electron_nano + 1;
+          //if (nano_t->Electron_cutBased[j]>0)
         e_pt_nano[j]->Fill(nano_t->Electron_pt[nano_indices_e[j]]);
         e_eta_nano[j]->Fill(nano_t->Electron_eta[nano_indices_e[j]]);
         e_phi_nano[j]->Fill(nano_t->Electron_phi[nano_indices_e[j]]);
       }
-        if(j< ra2b_indices_m.size()){
-          mu_pt_ra2b[j]->Fill(ra2b_t->Muons_fCoordinates_fPt[ra2b_indices_m[j]]);
+        /*if(j< ra2b_indices_m.size()){
+          if (ra2b_t->Muons_mediumID->at(ra2b_indices_m[j])) mu_pt_ra2b[j]->Fill(ra2b_t->Muons_fCoordinates_fPt[ra2b_indices_m[j]]);
           mu_eta_ra2b[j]->Fill(ra2b_t->Muons_fCoordinates_fEta[ra2b_indices_m[j]]);
           mu_phi_ra2b[j]->Fill(ra2b_t->Muons_fCoordinates_fPhi[ra2b_indices_m[j]]);
         }
         if(j< nano_indices_m.size()){
-            mu_pt_nano[j]->Fill(nano_t->Muon_pt[nano_indices_m[j]]);
+            if (nano_t->Muon_mediumId[j]) mu_pt_nano[j]->Fill(nano_t->Muon_pt[nano_indices_m[j]]);
             mu_eta_nano[j]->Fill(nano_t->Muon_eta[nano_indices_m[j]]);
             mu_phi_nano[j]->Fill(nano_t->Muon_phi[nano_indices_m[j]]);
-        }
+        }*/
         
-        if(j<ra2b_indices_p.size()){
+        /*if(j<ra2b_indices_p.size()){
           pho_pt_ra2b[j]->Fill(ra2b_t->Photons_fCoordinates_fPt[ra2b_indices_p[j]]);
           pho_eta_ra2b[j]->Fill(ra2b_t->Photons_fCoordinates_fEta[ra2b_indices_p[j]]);
           pho_phi_ra2b[j]->Fill(ra2b_t->Photons_fCoordinates_fPhi[ra2b_indices_p[j]]);
@@ -223,7 +222,7 @@ void LeptonsComp(){
           pho_pt_nano[j]->Fill(nano_t->Photon_pt[nano_indices_p[j]]);
           pho_eta_nano[j]->Fill(nano_t->Photon_eta[nano_indices_p[j]]);
           pho_phi_nano[j]->Fill(nano_t->Photon_phi[nano_indices_p[j]]);
-        }
+        }*/
     }
       
   }
@@ -236,19 +235,19 @@ void LeptonsComp(){
     sprintf(temp,"filteredElectron_pt%i.png",j);
     e_pt_ra2b[j]->Draw();
     e_pt_nano[j]->Draw("SAME");
-      can->BuildLegend();
+    can->BuildLegend(0.4,0.9, 0.6, 0.8);
     can->SaveAs(temp);
 
     sprintf(temp,"filteredElectron_eta%i.png",j);
     e_eta_ra2b[j]->Draw();
     e_eta_nano[j]->Draw("SAME");
-      can->BuildLegend();
+      can->BuildLegend(0.4,0.9, 0.6, 0.8);
     can->SaveAs(temp);
       
     sprintf(temp,"filteredElectron_phi%i.png",j);
     e_phi_ra2b[j]->Draw();
     e_phi_nano[j]->Draw("SAME");
-      can->BuildLegend();
+      can->BuildLegend(0.4,0.9, 0.6, 0.8);
     can->SaveAs(temp);
 
       
@@ -288,6 +287,10 @@ void LeptonsComp(){
       can->BuildLegend();
       can->SaveAs(temp);
   }
+    num_electron_ra = e_pt_ra2b[0]->Integral();
+    num_electron_nano = e_pt_nano[0]->Integral();
+    int num_muon_ra = mu_pt_ra2b[0]->Integral();
+    int num_muon_nano = mu_pt_nano[0]->Integral();
     cout << "Nano: " << num_electron_nano << endl;
     cout << "RA2b: " << num_electron_ra << endl;
  
