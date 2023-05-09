@@ -32,19 +32,19 @@ std::string decimalToBinary(int decimalNum) {
 Bool_t vetoBinaryElectron(Int_t bit){
     std::string binary = "";
     binary = decimalToBinary(bit);
-        //if(binary.size()<30 || binary.substr(27, 3)=="000" || binary.substr(24, 3)=="000" || binary.substr(18, 3)=="000" || binary.substr(15, 3)=="000" || binary.substr(12, 3)=="000" || binary.substr(9, 3)=="000" || binary.substr(6, 3)=="000" || binary.substr(3, 3)=="000"){
-    if(binary.size()<30 || binary.substr(12,3)=="000") return false;
+    if(binary.size()<30 || binary.substr(27, 3)=="000" || binary.substr(24, 3)=="000" ||  binary.substr(21, 3)=="000" || binary.substr(18, 3)=="000" || binary.substr(15, 3)=="000" || binary.substr(12, 3)=="000" || binary.substr(9, 3)=="000" || binary.substr(6, 3)=="000" || binary.substr(3, 3)=="000") return false;
+    //if(binary.size()<30 || binary.substr(12,3)=="000") return false;
         
     else return true;
         
 }
 
-vector<int> BitmapFilter(Int_t* bitmap, Float_t* pt, double pt_threshold){
+vector<int> BitmapFilter(UInt_t number, Int_t* bitmap, Float_t* pt, double pt_threshold){
     int n=4;
     vector<int> indices;
     for( int i = 0 ; i < n ; i++ ){
         //cout << bitmap[i] <<endl;
-        if(pt[i] > pt_threshold && vetoBinaryElectron(bitmap[i])/*&& fabs(eta[i]) < 2*/){
+        if( number>0 && pt[i] > pt_threshold && vetoBinaryElectron(bitmap[i])/*&& fabs(eta[i]) < 2*/){
               //cout << "i: " << i << " pt: " << pt[i] << endl;
               indices.push_back(i);
         }
@@ -144,7 +144,7 @@ void electrons(){
     }
 
 
-
+    int e_pt, e_eta, e_phi;
     int numEvents = ra2b_t->fChain->GetEntriesFast();
       //cout << numEvents << endl;
     for( int evt = 0 ; evt < numEvents ; evt++ ){
@@ -154,34 +154,34 @@ void electrons(){
 
         
         
-        //vector<int> nano_indices_e = BitmapFilter(nano_t->Electron_vidNestedWPBitmap, nano_t->Electron_pt, 10.0);
+        vector<int> nano_indices_e = BitmapFilter(nano_t->nElectron, nano_t->Electron_vidNestedWPBitmap, nano_t->Electron_pt, 10.0);
         
         vector<int> ra2b_indices_e = filterLeptons(ra2b_t->Electrons_, ra2b_t->Electrons_fCoordinates_fPt, 10.0);
-        vector<int> nano_indices_e = filterLeptons(nano_t->nElectron, nano_t->Electron_pt, 10.0);
+        //vector<int> nano_indices_e = filterLeptons(nano_t->nElectron, nano_t->Electron_pt, 10.0);
 
 
         //cout << "num good jets :: ra2b " << ra2b_indices.size() << " nano " << nano_indices.size() << endl;
 
-        for( int j= 0 ; j < 4 ; j++ ){
-            if( j < ra2b_indices_e.size() && j<ra2b_t->Electrons_passIso->size() && j<ra2b_t->Electrons_mediumID->size()){
-                bool iso = ra2b_t->Electrons_passIso->at(j);
+        for( int j= 0 ; j < 1 ; j++ ){
+            if( j < ra2b_indices_e.size() /*&& fabs(ra2b_t->Electrons_fCoordinates_fEta[ra2b_indices_e[j]])<1&& j<ra2b_t->Electrons_passIso->size() && j<ra2b_t->Electrons_mediumID->size()*/){
+                //bool iso = ra2b_t->Electrons_passIso->at(j);
                 //bool medium = ra2b_t->Electrons_mediumID->at(j);
-                if(iso /*&& medium*/&& fabs(ra2b_t->Electrons_fCoordinates_fEta[ra2b_indices_e[j]])<1){
+                //if(iso /*&& medium*/&& fabs(ra2b_t->Electrons_fCoordinates_fEta[ra2b_indices_e[j]])<1){
                     e_pt_ra2b[j]->Fill(ra2b_t->Electrons_fCoordinates_fPt[ra2b_indices_e[j]]);
                     e_eta_ra2b[j]->Fill(ra2b_t->Electrons_fCoordinates_fEta[ra2b_indices_e[j]]);
                     e_phi_ra2b[j]->Fill(ra2b_t->Electrons_fCoordinates_fPhi[ra2b_indices_e[j]]);
                     e_iso_ra2b[j]->Fill(ra2b_t->Electrons_iso->at(ra2b_indices_e[j]));
-                }
+                //}
             }if( j < nano_indices_e.size() ){
-                if (nano_t->Electron_cutBased[j]>1 && fabs(nano_t->Electron_eta[nano_indices_e[j]])<1 && nano_t->Electron_dxy[nano_indices_e[j]]<0.1 && nano_t->Electron_dz[nano_indices_e[j]]<0.2){ //0:fail, 1:veto, 2:loose, 3:medium, 4:tight
+                //if (nano_t->Electron_cutBased[j]>0){ //&& fabs(nano_t->Electron_eta[nano_indices_e[j]])<1 &&*/ nano_t->Electron_dxy[nano_indices_e[j]]<0.1 && nano_t->Electron_dz[nano_indices_e[j]]<0.2){ //0:fail, 1:veto, 2:loose, 3:medium, 4:tight
                     e_pt_nano[j]->Fill(nano_t->Electron_pt[nano_indices_e[j]]);
                     e_eta_nano[j]->Fill(nano_t->Electron_eta[nano_indices_e[j]]);
                     e_phi_nano[j]->Fill(nano_t->Electron_phi[nano_indices_e[j]]);
                     e_iso_nano[j]->Fill(nano_t->Electron_miniPFRelIso_all[nano_indices_e[j]]);
-                    sieie_nano[j]->Fill(nano_t->Electron_sieie[nano_indices_e[j]]);
-                }
+                    //sieie_nano[j]->Fill(nano_t->Electron_sieie[nano_indices_e[j]]);
+                //}
             }
-          
+
         }
     }
 
@@ -195,18 +195,21 @@ void electrons(){
         e_pt_nano[j]->Draw("SAME");
         can->BuildLegend(0.4,0.9, 0.6, 0.8);
         can->SaveAs(temp);
+        cout << e_pt_nano[j]->GetEntries() << endl;
 
         sprintf(temp,"Electron_eta%i.png",j);
         e_eta_ra2b[j]->Draw();
         e_eta_nano[j]->Draw("SAME");
         can->BuildLegend(0.4,0.9, 0.6, 0.8);
         can->SaveAs(temp);
+        cout << e_eta_nano[j]->GetEntries() << endl;
         
         sprintf(temp,"Electron_phi%i.png",j);
         e_phi_ra2b[j]->Draw();
         e_phi_nano[j]->Draw("SAME");
         can->BuildLegend(0.4,0.9, 0.6, 0.8);
         can->SaveAs(temp);
+        cout << e_phi_nano[j]->GetEntries() << endl;
         
         sprintf(temp,"Electron_iso%i.png",j);
         e_iso_ra2b[j]->Draw();

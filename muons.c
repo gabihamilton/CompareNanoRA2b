@@ -163,17 +163,17 @@ void muons(){
         //cout << "num good jets :: ra2b " << ra2b_indices.size() << " nano " << nano_indices.size() << endl;
 
         for( int j= 0 ; j < 4 ; j++ ){
-            if( j < ra2b_indices_e.size() && j<ra2b_t->Muons_passIso->size() /*&& j<ra2b_t->muons_mediumID->size()*/){
-                bool iso = ra2b_t->Muons_passIso->at(j);
-                //bool medium = ra2b_t->muons_mediumID->at(j);
-                if(/*iso && medium&&*/ fabs(ra2b_t->Muons_fCoordinates_fEta[ra2b_indices_e[j]])<1){
+            if( j < ra2b_indices_e.size() /*&& j<ra2b_t->Muons_passIso->size()*/ && j<ra2b_t->Muons_mediumID->size()){
+                //bool iso = ra2b_t->Muons_passIso->at(j);
+                bool medium = ra2b_t->Muons_mediumID->at(j);
+                if(/*iso &&*/ medium){//&& fabs(ra2b_t->Muons_fCoordinates_fEta[ra2b_indices_e[j]])<1){
                     e_pt_ra2b[j]->Fill(ra2b_t->Muons_fCoordinates_fPt[ra2b_indices_e[j]]);
                     e_eta_ra2b[j]->Fill(ra2b_t->Muons_fCoordinates_fEta[ra2b_indices_e[j]]);
                     e_phi_ra2b[j]->Fill(ra2b_t->Muons_fCoordinates_fPhi[ra2b_indices_e[j]]);
                     e_iso_ra2b[j]->Fill(ra2b_t->Muons_iso->at(ra2b_indices_e[j]));
                 }
             }if( j < nano_indices_e.size() ){
-                if (nano_t->Muon_looseId[nano_indices_e[j]] && fabs(nano_t->Muon_eta[nano_indices_e[j]])<1 && nano_t->Muon_dxy[nano_indices_e[j]]<0.2 && nano_t->Muon_dz[nano_indices_e[j]]<0.5){
+                if (nano_t->Muon_mediumId[nano_indices_e[j]] /*&& fabs(nano_t->Muon_eta[nano_indices_e[j]])<1 */&& nano_t->Muon_dxy[nano_indices_e[j]]<0.2 && nano_t->Muon_dz[nano_indices_e[j]]<0.5){
                     e_pt_nano[j]->Fill(nano_t->Muon_pt[nano_indices_e[j]]);
                     e_eta_nano[j]->Fill(nano_t->Muon_eta[nano_indices_e[j]]);
                     e_phi_nano[j]->Fill(nano_t->Muon_phi[nano_indices_e[j]]);
