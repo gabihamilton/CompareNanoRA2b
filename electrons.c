@@ -32,7 +32,7 @@ std::string decimalToBinary(int decimalNum) {
 Bool_t vetoBinaryElectron(Int_t bit){
     std::string binary = "";
     binary = decimalToBinary(bit);
-    if(binary.size()<30 || binary.substr(27, 3)=="000" || binary.substr(24, 3)=="000" ||  binary.substr(21, 3)=="000" || binary.substr(18, 3)=="000" || binary.substr(15, 3)=="000" || binary.substr(12, 3)=="000" || binary.substr(9, 3)=="000" || binary.substr(6, 3)=="000" || binary.substr(3, 3)=="000") return false;
+    if(binary.size()<30 || binary.substr(27, 3)=="000" || binary.substr(24, 3)=="000" || /* binary.substr(21, 3)=="000" || */binary.substr(18, 3)=="000" || binary.substr(15, 3)=="000" || binary.substr(12, 3)=="000" || binary.substr(9, 3)=="000" || binary.substr(6, 3)=="000" || binary.substr(3, 3)=="000") return false;
     //if(binary.size()<30 || binary.substr(12,3)=="000") return false;
         
     else return true;
@@ -173,13 +173,13 @@ void electrons(){
                     e_iso_ra2b[j]->Fill(ra2b_t->Electrons_iso->at(ra2b_indices_e[j]));
                 //}
             }if( j < nano_indices_e.size() ){
-                //if (nano_t->Electron_cutBased[j]>0){ //&& fabs(nano_t->Electron_eta[nano_indices_e[j]])<1 &&*/ nano_t->Electron_dxy[nano_indices_e[j]]<0.1 && nano_t->Electron_dz[nano_indices_e[j]]<0.2){ //0:fail, 1:veto, 2:loose, 3:medium, 4:tight
+                if (/*nano_t->Electron_cutBased[j]>0){ && fabs(nano_t->Electron_eta[nano_indices_e[j]])<1 &&*/ nano_t->Electron_dxy[nano_indices_e[j]]<0.1 && nano_t->Electron_dz[nano_indices_e[j]]<0.2){ //0:fail, 1:veto, 2:loose, 3:medium, 4:tight
                     e_pt_nano[j]->Fill(nano_t->Electron_pt[nano_indices_e[j]]);
                     e_eta_nano[j]->Fill(nano_t->Electron_eta[nano_indices_e[j]]);
                     e_phi_nano[j]->Fill(nano_t->Electron_phi[nano_indices_e[j]]);
                     e_iso_nano[j]->Fill(nano_t->Electron_miniPFRelIso_all[nano_indices_e[j]]);
                     //sieie_nano[j]->Fill(nano_t->Electron_sieie[nano_indices_e[j]]);
-                //}
+                }
             }
 
         }
