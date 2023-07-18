@@ -9,7 +9,7 @@ vector<int> filterLeptons(UInt_t number, Float_t* pt, double pt_threshold/*, Flo
     //int n=4;
     vector<int> indices;
     for( int i = 0 ; i < number ; i++ ){
-        if(pt[i] > pt_threshold /*&& fabs(eta[i]) < 2*/){
+        if(pt[i] > pt_threshold && pt[i] < 240/*&& fabs(eta[i]) < 2*/){
             //cout << "i: " << i << " pt: " << pt[i] << endl;
             indices.push_back(i);
         }
@@ -146,13 +146,15 @@ void electrons(){
     vector<TH1F*> e_iso_ra2b;
     vector<TH1F*> e_iso_nano;
     for( int i = 0 ; i < n ; i++ ){
-        sprintf(temp,"Electron_iso_ra2b%i",i);
-        e_iso_ra2b.push_back(new TH1F(temp,";Electron iso [GeV];Events",50,0,50));
+        //sprintf(temp,"Electron_iso_ra2b%i",i);
+        sprintf(temp,"RA2b");
+        e_iso_ra2b.push_back(new TH1F(temp,";Electron iso [GeV];Events",50,0,10));
         e_iso_ra2b.back()->SetLineWidth(2);
         e_iso_ra2b.back()->SetLineStyle(1);
         e_iso_ra2b.back()->SetLineColor(2);
-        sprintf(temp,"Electron_iso_nano%i",i);
-        e_iso_nano.push_back(new TH1F(temp,";Electron iso [GeV];Events",50,0,50));
+        //sprintf(temp,"Electron_iso_nano%i",i);
+        sprintf(temp,"Nano");
+        e_iso_nano.push_back(new TH1F(temp,";Electron iso [GeV];Events",50,0,10));
         e_iso_nano.back()->SetLineWidth(2);
         e_iso_nano.back()->SetLineStyle(2);
         e_iso_nano.back()->SetLineColor(4);
@@ -183,7 +185,7 @@ void electrons(){
 
     int e_pt, e_eta, e_phi;
     int numEvents = ra2b_t->fChain->GetEntriesFast();
-      //cout << numEvents << endl;
+      cout << numEvents << endl;
     for( int evt = 0 ; evt < numEvents ; evt++ ){
         if(debug) cout << "event: " << numEvents-evt-1 << endl;//evt << endl;
         ra2b_t->GetEntry(evt);
@@ -192,8 +194,8 @@ void electrons(){
         
         //vector<int> nano_indices_e = BitmapFilter(nano_t->nElectron, nano_t->Electron_vidNestedWPBitmap, nano_t->Electron_pt, 10.0);
         
-        vector<int> ra2b_indices_e = filterLeptons(ra2b_t->Electrons_, ra2b_t->Electrons_fCoordinates_fPt, 15.0);
-        vector<int> nano_indices_e = filterLeptons(nano_t->nElectron, nano_t->Electron_pt, 15.0);
+        vector<int> ra2b_indices_e = filterLeptons(ra2b_t->Electrons_, ra2b_t->Electrons_fCoordinates_fPt, 200.0);
+        vector<int> nano_indices_e = filterLeptons(nano_t->nElectron, nano_t->Electron_pt, 200.0);
 
 
 
@@ -204,9 +206,10 @@ void electrons(){
                 //if(/*iso && medium&& fabs(ra2b_t->Electrons_fCoordinates_fEta[ra2b_indices_e[j]])<1*/ra2b_t->Electrons_mediumID->at(j)){
                     //e_pt_ra2b[j]->Fill(ra2b_t->Electrons_fCoordinates_fPt[ra2b_indices_e[j]]);
                     //e_eta_ra2b[j]->Fill(ra2b_t->Electrons_fCoordinates_fEta[ra2b_indices_e[j]]);
-                    e_phi_ra2b[j]->Fill(ra2b_t->Electrons_fCoordinates_fPhi[ra2b_indices_e[j]]);
+                    //e_phi_ra2b[j]->Fill(ra2b_t->Electrons_fCoordinates_fPhi[ra2b_indices_e[j]]);
                     //e_iso_ra2b[j]->Fill(ra2b_t->Electrons_iso->at(ra2b_indices_e[j]));
                     //e_all_ra2b->Fill(ra2b_t->Electrons_fCoordinates_fPt[ra2b_indices_e[j]]);
+                    cout << evt << " RA  " << ra2b_indices_e[j] << endl;
                 //}
             }
             if( j < nano_indices_e.size() ){
@@ -219,10 +222,12 @@ void electrons(){
                 if (/*nano_t->Electron_cutBased[j]>0){ && fabs(nano_t->Electron_eta[nano_indices_e[j]])<1 && */nano_t->Electron_dxy[nano_indices_e[j]]<0.1 && nano_t->Electron_dz[nano_indices_e[j]]<0.2 && (cut_bits & 0x3FF) == 0x3FF){//except isolation: (cut_bits & 0x37F) == 0x37F){ //0:fail, 1:veto, 2:loose, 3:medium, 4:tight
                     //e_pt_nano[j]->Fill(nano_t->Electron_pt[nano_indices_e[j]]);
                     //e_eta_nano[j]->Fill(nano_t->Electron_eta[nano_indices_e[j]]);
-                    e_phi_nano[j]->Fill(nano_t->Electron_phi[nano_indices_e[j]]);
+                    //e_phi_nano[j]->Fill(nano_t->Electron_phi[nano_indices_e[j]]);
                     //e_iso_nano[j]->Fill(nano_t->Electron_miniPFRelIso_all[nano_indices_e[j]]);
                     //e_all_nano->Fill(nano_t->Electron_pt[nano_indices_e[j]]);
                     //sieie_nano[j]->Fill(nano_t->Electron_sieie[nano_indices_e[j]]);
+                    
+                    cout << evt << " NANO  " << nano_indices_e[j] << endl;
                 }
                 /*if(nano_t->Electron_cutBased[nano_indices_e[j]]>0){
                     e_pt_ra2b[j]->Fill(nano_t->Electron_pt[nano_indices_e[j]]);
@@ -274,7 +279,7 @@ void electrons(){
         legend->AddEntry("Nano","Nano","l");
         legend->AddEntry("RA2b","RA2b","l");
         legend->Draw();
-*/
+
         sprintf(temp,"Electron_phi%i.png",j);
         e_phi_nano[j]->Draw();
         e_phi_ra2b[j]->Draw("SAME");
@@ -291,14 +296,24 @@ void electrons(){
         legend->AddEntry("Nano","Nano","l");
         legend->AddEntry("RA2b","RA2b","l");
         legend->Draw();
-/*
+*/
         sprintf(temp,"Electron_iso%i.png",j);
-        e_iso_ra2b[j]->Draw();
-        e_iso_nano[j]->Draw("SAME");
+        e_iso_nano[j]->Draw();
+        e_iso_ra2b[j]->Draw("SAME");
         can->BuildLegend(0.4,0.9, 0.6, 0.8);
         can->SaveAs(temp);
+        // Create and draw the ratio plot
+        auto rp = new TRatioPlot(e_iso_ra2b[j],e_iso_nano[j],  "diff");
+        can->SetTicks(0, 1);
+        rp->Draw();
+        rp->GetLowYaxis()->SetNdivisions(505);
+        rp->GetUpperPad()->cd();
+        TLegend *legend = new TLegend(0.3,0.7,0.7,0.85);
+        legend->AddEntry("Nano","Nano","l");
+        legend->AddEntry("RA2b","RA2b","l");
+        legend->Draw();
         
-        sprintf(temp,"Sieie%i.png",j);
+        /*sprintf(temp,"Sieie%i.png",j);
         //e_iso_ra2b[j]->Draw();
         sieie_nano[j]->Draw();
         can->BuildLegend(0.4,0.9, 0.6, 0.8);
