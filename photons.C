@@ -206,8 +206,6 @@ void photons(){
         }
     }
     
-    cout << "OOOOOOK" << endl;
-    
 
   TCanvas* can = new TCanvas("can","can",500,500);
   can->SetLogy();
