@@ -75,7 +75,7 @@ void photons(){
         //cout << "num good jets :: ra2b " << ra2b_indices.size() << " nano " << nano_indices.size() << endl;
 
         for( int j= 0 ; j < ra2b_t->Photons_ ; j++ ){
-            if(ra2b_t->Photons_fCoordinates_fPt[j]>30.0 && ra2b_t->Photons_fullID->at(j) && !ra2b_t->Photons_hasPixelSeed->at(j) &&     ra2b_t->Photons_passElectronVeto->at(j) && /*ra2b_t->Photons_isEB->at(ra2b_indices_p[j]) &&*/ fabs(ra2b_t->Photons_fCoordinates_fEta[j])<1){
+            if(ra2b_t->Photons_fCoordinates_fPt[j]>30.0 && ra2b_t->Photons_fullID->at(j) && !ra2b_t->Photons_hasPixelSeed->at(j) &&     ra2b_t->Photons_passElectronVeto->at(j) && ra2b_t->Photons_isEB->at(j)/* && fabs(ra2b_t->Photons_fCoordinates_fEta[j])<1*/){
                 pt_ra2b->Fill(ra2b_t->Photons_fCoordinates_fPt[j]);
                 eta_ra2b->Fill(ra2b_t->Photons_fCoordinates_fEta[j]);
                 phi_ra2b->Fill(ra2b_t->Photons_fCoordinates_fPhi[j]);
@@ -83,7 +83,7 @@ void photons(){
         }
         
         for (int j=0; j<nano_t->nPhoton;j++){
-            if(nano_t->Photon_pt[j]>30.0 && nano_t->Photon_cutBased[j]>0 && !nano_t->Photon_pixelSeed[j] && nano_t->Photon_electronVeto[j] && /*nano_t->Photon_isScEtaEB[nano_indices_p[j]] &&*/ fabs(nano_t->Photon_eta[j])<1){ //fail:0, loose:1, medium:2, tight:3
+            if(nano_t->Photon_pt[j]>30.0 && nano_t->Photon_cutBased[j]>0 && !nano_t->Photon_pixelSeed[j] && nano_t->Photon_electronVeto[j] && !nano_t->Photon_isScEtaEE[j] /*&& fabs(nano_t->Photon_eta[j])<1*/){ //fail:0, loose:1, medium:2, tight:3
                 pt_nano->Fill(nano_t->Photon_pt[j]);
                 eta_nano->Fill(nano_t->Photon_eta[j]);
                 phi_nano->Fill(nano_t->Photon_phi[j]);
@@ -94,7 +94,7 @@ void photons(){
 
     TCanvas* can = new TCanvas("can","can",500,500);
     can->SetLogy();
-
+/*
     pt_ra2b->Draw();
     pt_nano->Draw("SAME");
     can->BuildLegend();
@@ -110,7 +110,7 @@ void photons(){
     legend->AddEntry("Nano Pt","Nano Pt","l");
     legend->Draw();
     cout << pt_nano->GetEntries() << endl;
-
+*/
     eta_ra2b->Draw();
     eta_nano->Draw("SAME");
     can->BuildLegend();
@@ -126,7 +126,7 @@ void photons(){
     legend->AddEntry("Nano Eta","Nano Eta","l");
     legend->Draw();
     cout << eta_nano->GetEntries() << endl;
-    
+ /*
     phi_ra2b->Draw();
     phi_nano->Draw("SAME");
     can->BuildLegend();
@@ -143,5 +143,5 @@ void photons(){
     legend->Draw();
     cout << phi_nano->GetEntries() << endl;
     
-    
+    */
 }

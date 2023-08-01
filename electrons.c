@@ -127,7 +127,7 @@ void electrons(){
 
         for( int j= 0 ; j < ra2b_t->Electrons_ ; j++ ){
 
-            if(ra2b_t->Electrons_fCoordinates_fPt[j]>10.0 /*&& ra2b_t->Electrons_mediumID->at(j) && ra2b_t->Electrons_passIso->at(j)*/){
+            if(ra2b_t->Electrons_fCoordinates_fPt[j]>10.0 /*&& ra2b_t->Electrons_mediumID->at(j)*/ && ra2b_t->Electrons_passIso->at(j)){
                 pt_ra2b->Fill(ra2b_t->Electrons_fCoordinates_fPt[j]);
                 eta_ra2b->Fill(ra2b_t->Electrons_fCoordinates_fEta[j]);
                 phi_ra2b->Fill(ra2b_t->Electrons_fCoordinates_fPhi[j]);
@@ -154,7 +154,7 @@ void electrons(){
             int cut_bits = make_cut_bits(nano_t->Electron_vidNestedWPBitmap[j],nr_cuts,cut_size,id_nr);
             //if((cut_bits & 0x3EF) == 0x3EF){
             //BITMAP
-            if (nano_t->Electron_pt[j]>10.0 && nano_t->Electron_cutBased[j]>0 && nano_t->Electron_dxy[j]<0.1 && nano_t->Electron_dz[j]<0.2 && (cut_bits & 0x37F) == 0x37F){//except isolation: (cut_bits & 0x37F) == 0x37F){ //0:fail, 1:veto, 2:loose, 3:medium, 4:tight
+            if (nano_t->Electron_pt[j]>10.0 && nano_t->Electron_cutBased[j]>0 && nano_t->Electron_dxy[j]<0.1 && nano_t->Electron_dz[j]<0.2 && (cut_bits & 0x37F) == 0x37F && nano_t->Electron_miniPFRelIso_all[j]<0.1){//except isolation: (cut_bits & 0x37F) == 0x37F){ //0:fail, 1:veto, 2:loose, 3:medium, 4:tight
                 pt_nano->Fill(nano_t->Electron_pt[j]);
                 eta_nano->Fill(nano_t->Electron_eta[j]);
                 phi_nano->Fill(nano_t->Electron_phi[j]);
@@ -194,7 +194,7 @@ void electrons(){
     can->SetTicks(0, 1);
     rp->Draw();
     rp->GetLowYaxis()->SetNdivisions(505);
-    rp->GetLowerRefYaxis()->SetTitle("diff");
+    //rp->GetLowerRefYaxis()->SetTitle("diff");
     rp->GetUpperPad()->cd();
     TLegend *legend = new TLegend(0.3,0.7,0.7,0.85);
     legend->AddEntry("TreeMaker Pt","TreeMaker Pt","l");
@@ -215,7 +215,7 @@ void electrons(){
     legend->AddEntry("Nano Eta","Nano Eta","l");
     legend->AddEntry("TreeMaker Eta","TreeMaker Eta","l");
     legend->Draw();
-
+*/
     phi_nano->Draw();
     phi_ra2b->Draw("SAME");
     can->BuildLegend(0.4,0.9, 0.6, 0.8);
@@ -231,8 +231,8 @@ void electrons(){
     legend->AddEntry("Nano Phi","Nano Phi","l");
     legend->AddEntry("TreeMaker Phi","TreeMaker Phi","l");
     legend->Draw();
+ /*
  
- */
     iso_ra2b->Draw();
     iso_nano->Draw("SAME");
     can->BuildLegend(0.4,0.9, 0.6, 0.8);
@@ -247,7 +247,7 @@ void electrons(){
     legend->AddEntry("Nano iso","Nano iso","l");
     legend->AddEntry("TreeMaker iso","TreeMaker iso","l");
     legend->Draw();
-    
+    */
    
 }
     

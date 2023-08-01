@@ -68,86 +68,35 @@ void muons(){
     
     
   
-    vector<TH1F*> e_pt_ra2b;
-    vector<TH1F*> e_pt_nano;
-    for( int i = 0 ; i < 4 ; i++ ){
-        //sprintf(temp,"muonpt_ra2b%i",i);
-        sprintf(temp, "RA2b");
-        e_pt_ra2b.push_back(new TH1F("RA2b",";muon p_T [GeV];Events",80,0,800));
-        e_pt_ra2b.back()->SetLineWidth(2);
-        e_pt_ra2b.back()->SetLineStyle(1);
-        e_pt_ra2b.back()->SetLineColor(2);
-        //sprintf(temp,"muonpt_nano%i",i);
-        sprintf(temp, "Nano");
-        e_pt_nano.push_back(new TH1F("Nano",";muon p_T [GeV];Events",80,0,800));
-        e_pt_nano.back()->SetLineWidth(2);
-        e_pt_nano.back()->SetLineStyle(2);
-        e_pt_nano.back()->SetLineColor(4);
-    }
+    TH1F *pt_ra2b = new TH1F("TreeMaker Pt", ";Muon p_T [GeV];Events",80,0,800);
+    pt_ra2b->SetLineWidth(2);
+    pt_ra2b->SetLineStyle(1);
+    pt_ra2b->SetLineColor(2);
+    
+    TH1F *pt_nano = new TH1F("Nano Pt", ";Muon p_T [GeV];Events",80,0,800);
+    pt_nano->SetLineWidth(2);
+    pt_nano->SetLineStyle(2);
+    pt_nano->SetLineColor(4);
 
-    vector<TH1F*> e_eta_ra2b;
-    vector<TH1F*> e_eta_nano;
-    for( int i = 0 ; i < 4 ; i++ ){
-        //sprintf(temp,"muoneta_ra2b%i",i);
-        sprintf(temp, "RA2b");
-        e_eta_ra2b.push_back(new TH1F("RA2b",";muon #eta [GeV];Events",50,-5,5));
-        e_eta_ra2b.back()->SetLineWidth(2);
-        e_eta_ra2b.back()->SetLineStyle(1);
-        e_eta_ra2b.back()->SetLineColor(2);
-        //sprintf(temp,"muoneta_nano%i",i);
-        sprintf(temp, "Nano");
-        e_eta_nano.push_back(new TH1F("Nano",";muon #eta [GeV];Events",50,-5,5));
-        e_eta_nano.back()->SetLineWidth(2);
-        e_eta_nano.back()->SetLineStyle(2);
-        e_eta_nano.back()->SetLineColor(4);
-    }
+    TH1F* eta_ra2b = new TH1F("TreeMaker Eta",";Muon #eta [GeV];Events",50,-5,5);
+    eta_ra2b->SetLineWidth(2);
+    eta_ra2b->SetLineStyle(1);
+    eta_ra2b->SetLineColor(2);
     
-    vector<TH1F*> e_phi_ra2b;
-    vector<TH1F*> e_phi_nano;
-    for( int i = 0 ; i < 4 ; i++ ){
-        //sprintf(temp,"muonphi_ra2b%i",i);
-        sprintf(temp, "RA2b");
-        e_phi_ra2b.push_back(new TH1F("RA2b",";muon #phi [GeV];Events",50,-5,5));
-        e_phi_ra2b.back()->SetLineWidth(2);
-        e_phi_ra2b.back()->SetLineStyle(1);
-        e_phi_ra2b.back()->SetLineColor(2);
-        //sprintf(temp,"muonphi_nano%i",i);
-        sprintf(temp, "Nano");
-        e_phi_nano.push_back(new TH1F("Nano",";muon #phi [GeV];Events",50,-5,5));
-        e_phi_nano.back()->SetLineWidth(2);
-        e_phi_nano.back()->SetLineStyle(2);
-        e_phi_nano.back()->SetLineColor(4);
-    }
-  
-    vector<TH1F*> e_iso_ra2b;
-    vector<TH1F*> e_iso_nano;
-    for( int i = 0 ; i < 4 ; i++ ){
-        sprintf(temp,"muon_iso_ra2b%i",i);
-        e_iso_ra2b.push_back(new TH1F(temp,";muon iso [GeV];Events",50,0,50));
-        e_iso_ra2b.back()->SetLineWidth(2);
-        e_iso_ra2b.back()->SetLineStyle(1);
-        e_iso_ra2b.back()->SetLineColor(2);
-        sprintf(temp,"muon_iso_nano%i",i);
-        e_iso_nano.push_back(new TH1F(temp,";muon iso [GeV];Events",50,0,50));
-        e_iso_nano.back()->SetLineWidth(2);
-        e_iso_nano.back()->SetLineStyle(2);
-        e_iso_nano.back()->SetLineColor(4);
-    }
+    TH1F* eta_nano = new TH1F("Nano Eta",";Muon #eta [GeV];Events",50,-5,5);
+    eta_nano->SetLineWidth(2);
+    eta_nano->SetLineStyle(2);
+    eta_nano->SetLineColor(4);
+
+    TH1F* phi_ra2b = new TH1F("TreeMaker Phi",";Muon #phi [GeV];Events",50,-5,5);
+    phi_ra2b->SetLineWidth(2);
+    phi_ra2b->SetLineStyle(1);
+    phi_ra2b->SetLineColor(2);
     
-    vector<TH1F*> sieie_ra2b;
-    vector<TH1F*> sieie_nano;
-    for( int i = 0 ; i < 4 ; i++ ){
-        sprintf(temp,"Sieie_ra2b%i",i);
-        sieie_ra2b.push_back(new TH1F(temp,";muon #phi [GeV];Events",50,0,1));
-        sieie_ra2b.back()->SetLineWidth(2);
-        sieie_ra2b.back()->SetLineStyle(1);
-        sieie_ra2b.back()->SetLineColor(2);
-        sprintf(temp,"Sieie_nano%i",i);
-        sieie_nano.push_back(new TH1F(temp,";muon #phi [GeV];Events",50,0,0.015));
-        sieie_nano.back()->SetLineWidth(2);
-        sieie_nano.back()->SetLineStyle(2);
-        sieie_nano.back()->SetLineColor(4);
-    }
+    TH1F* phi_nano = new TH1F("Nano Phi",";Muon #phi [GeV];Events",50,-5,5);
+    phi_nano->SetLineWidth(2);
+    phi_nano->SetLineStyle(2);
+    phi_nano->SetLineColor(4);
 
 
 
@@ -162,107 +111,86 @@ void muons(){
         
         //vector<int> nano_indices_e = BitmapFilter(nano_t->Muon_vidNestedWPBitmap, nano_t->Muon_pt, 10.0);
         
-        vector<int> ra2b_indices_e = filterLeptons(ra2b_t->Muons_, ra2b_t->Muons_fCoordinates_fPt, 15.0);
-        vector<int> nano_indices_e = filterLeptons(nano_t->nMuon, nano_t->Muon_pt, 15.0);
+        //vector<int> ra2b_indices_e = filterLeptons(ra2b_t->Muons_, ra2b_t->Muons_fCoordinates_fPt, 15.0);
+        //vector<int> nano_indices_e = filterLeptons(nano_t->nMuon, nano_t->Muon_pt, 15.0);
 
 
         //cout << "num good jets :: ra2b " << ra2b_indices.size() << " nano " << nano_indices.size() << endl;
 
-        for( int j= 0 ; j < 1 ; j++ ){
-            if( j < ra2b_indices_e.size() /*&& j<ra2b_t->Muons_passIso->size()*/ && j<ra2b_t->Muons_mediumID->size()){
+        for( int j= 0 ; j < ra2b_t->Muons_ ; j++ ){
                 //bool iso = ra2b_t->Muons_passIso->at(j);
                 //bool medium = ra2b_t->Muons_mediumID->at(j);
-                if(/*iso &&*/ra2b_t->Muons_mediumID->at(j)){//&& fabs(ra2b_t->Muons_fCoordinates_fEta[ra2b_indices_e[j]])<1){
-                    e_pt_ra2b[j]->Fill(ra2b_t->Muons_fCoordinates_fPt[ra2b_indices_e[j]]);
-                    e_eta_ra2b[j]->Fill(ra2b_t->Muons_fCoordinates_fEta[ra2b_indices_e[j]]);
-                    e_phi_ra2b[j]->Fill(ra2b_t->Muons_fCoordinates_fPhi[ra2b_indices_e[j]]);
-                    //e_iso_ra2b[j]->Fill(ra2b_t->Muons_iso->at(ra2b_indices_e[j]));
-                }
+            if(/*iso &&*/ra2b_t->Muons_mediumID->at(j) && ra2b_t->Muons_fCoordinates_fPt[j]>15.0){//&& fabs(ra2b_t->Muons_fCoordinates_fEta[ra2b_indices_e[j]])<1){
+                pt_ra2b->Fill(ra2b_t->Muons_fCoordinates_fPt[j]);
+                eta_ra2b->Fill(ra2b_t->Muons_fCoordinates_fEta[j]);
+                phi_ra2b->Fill(ra2b_t->Muons_fCoordinates_fPhi[j]);
             }
+        }
             //Bool_t looseID=nano_t->Muon_looseId;
             //Bool_t softID=nano_t->Muon_softId[nano_indices_e[j]];
             //Bool_t softmvaID=nano_t->Muon_softMvaId;
             //UChar_t highptID=nano_t->Muon_highPtId;
             
+        for(int j=0; j < nano_t->nMuon; j++){
 
-            if( j < nano_indices_e.size() /*&& nano_t->Muon_softMvaId[nano_indices_e[j]] && !softmvaID && highptID!=1 && highptID!=2*/){
-                if (nano_t->Muon_mediumId[nano_indices_e[j]] /*&& fabs(nano_t->Muon_eta[nano_indices_e[j]])<1 && nano_t->Muon_dxy[nano_indices_e[j]]<0.2 && nano_t->Muon_dz[nano_indices_e[j]]<0.5*/){
-                    e_pt_nano[j]->Fill(nano_t->Muon_pt[nano_indices_e[j]]);
-                    e_eta_nano[j]->Fill(nano_t->Muon_eta[nano_indices_e[j]]);
-                    e_phi_nano[j]->Fill(nano_t->Muon_phi[nano_indices_e[j]]);
-                    //e_iso_nano[j]->Fill(nano_t->Muon_miniPFRelIso_all[nano_indices_e[j]]);
-                    //sieie_nano[j]->Fill(nano_t->Muon_sieie[nano_indices_e[j]]);
-                }
+            if (nano_t->Muon_mediumId[j] && nano_t->Muon_pt[j]>15.0/*&& fabs(nano_t->Muon_eta[nano_indices_e[j]])<1 && nano_t->Muon_dxy[nano_indices_e[j]]<0.2 && nano_t->Muon_dz[nano_indices_e[j]]<0.5*/){
+                pt_nano->Fill(nano_t->Muon_pt[j]);
+                eta_nano->Fill(nano_t->Muon_eta[j]);
+                phi_nano->Fill(nano_t->Muon_phi[j]);
             }
-          
         }
+        
     }
 
     TCanvas* can = new TCanvas("can","can",500,500);
     can->SetLogy();
 
+/*
+    pt_nano->Draw();
+    pt_ra2b->Draw("SAME");
+    //can->BuildLegend(0.4,0.9, 0.6, 0.8);
+    can->SaveAs(temp);
+    auto rp = new TRatioPlot(pt_ra2b,pt_nano);
+    can->SetTicks(0, 1);
+    rp->Draw();
+    rp->GetLowYaxis()->SetNdivisions(505);
+    rp->GetUpperPad()->cd();
+    TLegend *legend = new TLegend(0.3,0.7,0.7,0.85);
+    legend->AddEntry("TreeMaker Pt","TreeMaker Pt","l");
+    legend->AddEntry("Nano Pt","Nano Pt","l");
+    legend->Draw();
 
-    for( int j= 0 ; j < 1 ; j++ ){
- /*       sprintf(temp,"muon_pt%i.png",j);
-        e_pt_nano[j]->Draw();
-        e_pt_ra2b[j]->Draw("SAME");
-        //can->BuildLegend(0.4,0.9, 0.6, 0.8);
-        can->SaveAs(temp);
-        auto rp = new TRatioPlot(e_pt_ra2b[j],e_pt_nano[j],  "diff");
-        can->SetTicks(0, 1);
-        rp->Draw();
-        rp->GetLowYaxis()->SetNdivisions(505);
-        rp->GetUpperPad()->cd();
-        TLegend *legend = new TLegend(0.3,0.7,0.7,0.85);
-        legend->AddEntry("RA2b","RA2b","l");
-        legend->AddEntry("Nano","Nano","l");
-        legend->Draw();
-
-        sprintf(temp,"muon_eta%i.png",j);
-        e_eta_nano[j]->Draw();
-        e_eta_ra2b[j]->Draw("SAME");
-        can->BuildLegend(0.4,0.9, 0.6, 0.8);
-        can->SaveAs(temp);
-         auto rp = new TRatioPlot(e_eta_ra2b[j],e_eta_nano[j],  "diff");
-         can->SetTicks(0, 1);
-         rp->Draw();
-         rp->GetLowYaxis()->SetNdivisions(505);
-         rp->GetUpperPad()->cd();
-         TLegend *legend = new TLegend(0.3,0.7,0.7,0.85);
-         legend->AddEntry("RA2b","RA2b","l");
-         legend->AddEntry("Nano","Nano","l");
-         legend->Draw();
-         
+    
+    eta_nano->Draw();
+    eta_ra2b->Draw("SAME");
+    can->BuildLegend(0.4,0.9, 0.6, 0.8);
+    can->SaveAs(temp);
+    auto rp = new TRatioPlot(eta_ra2b,eta_nano);
+    can->SetTicks(0, 1);
+    rp->Draw();
+    rp->GetLowYaxis()->SetNdivisions(505);
+    rp->GetUpperPad()->cd();
+    TLegend *legend = new TLegend(0.3,0.7,0.7,0.85);
+    legend->AddEntry("TreeMaker Eta","TreeMaker Eta","l");
+    legend->AddEntry("Nano Eta","Nano Eta","l");
+    legend->Draw();
+     
 */
-        sprintf(temp,"muon_phi%i.png",j);
-        e_phi_nano[j]->Draw();
-        e_phi_ra2b[j]->Draw("SAME");
-        can->BuildLegend(0.4,0.9, 0.6, 0.8);
-        can->SaveAs(temp);
-        auto rp = new TRatioPlot(e_phi_ra2b[j],e_phi_nano[j],  "diff");
-        can->SetTicks(0, 1);
-        rp->Draw();
-        rp->GetLowYaxis()->SetNdivisions(505);
-        rp->GetUpperPad()->cd();
-        TLegend *legend = new TLegend(0.3,0.7,0.7,0.85);
-        legend->AddEntry("RA2b","RA2b","l");
-        legend->AddEntry("Nano","Nano","l");
-        legend->Draw();
-        cout << e_phi_nano[j]->GetEntries() << endl;
-        
-        /*
-        sprintf(temp,"muon_iso%i.png",j);
-        e_iso_ra2b[j]->Draw();
-        e_iso_nano[j]->Draw("SAME");
-        can->BuildLegend(0.4,0.9, 0.6, 0.8);
-        can->SaveAs(temp);
-        
-        sprintf(temp,"Sieie%i.png",j);
-        //e_iso_ra2b[j]->Draw();
-        sieie_nano[j]->Draw();
-        can->BuildLegend(0.4,0.9, 0.6, 0.8);
-        can->SaveAs(temp);*/
-    }
+    phi_nano->Draw();
+    phi_ra2b->Draw("SAME");
+    can->BuildLegend(0.4,0.9, 0.6, 0.8);
+    can->SaveAs(temp);
+    auto rp = new TRatioPlot(phi_ra2b,phi_nano);
+    can->SetTicks(0, 1);
+    rp->Draw();
+    rp->GetLowYaxis()->SetNdivisions(505);
+    rp->GetUpperPad()->cd();
+    TLegend *legend = new TLegend(0.3,0.7,0.7,0.85);
+    legend->AddEntry("TreeMaker Phi","TreeMaker Phi","l");
+    legend->AddEntry("Nano Phi","Nano Phi","l");
+    legend->Draw();
+    cout << phi_nano->GetEntries() << endl;
+    
         
 }
     
